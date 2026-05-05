@@ -18,7 +18,7 @@ public:
     void Delete() const;
     void Bind() const;
     void Unbind() const;
-    void chekBuffer() const;
+    void chekBufferForErr() const;
 };
 
 

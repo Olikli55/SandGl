@@ -37,4 +37,31 @@ void main()
 }
 )GLSL";
 
+inline constexpr const char* screen_vert = R"GLSL(
+#version 400 core
+layout (location = 0) in vec2 aPos;
+layout (location = 1) in vec2 aTexCoords;
+
+out vec2 TexCoords;
+
+void main() {
+    gl_Position = vec4(aPos.x, aPos.y,0.0, 1.0);
+    TexCoords = aTexCoords;
+}
+
+)GLSL";
+
+inline constexpr const char* screen_frag = R"GLSL(
+#version 400 core
+out vec2 FragColor;
+in vec2 TexCoords;
+
+uniform smapler2D screenTexture;
+
+void main() {
+    FragColor = texture(screenTexture, TexCoords);
+}
+
+)GLSL";
+
 } // namespace generated_shaders

@@ -18,14 +18,19 @@ set(SHADER_OUTPUT_FILE "${SHADER_OUTPUT_DIR}/generated_shaders.h")
 set(DEFAULT_VERT_SHADER "${CMAKE_CURRENT_SOURCE_DIR}/shaders/default.vert")
 set(DEFAULT_FRAG_SHADER "${CMAKE_CURRENT_SOURCE_DIR}/shaders/default.frag")
 
+set(SCREEN_VERT_SHADER "${CMAKE_CURRENT_SOURCE_DIR}/shaders/frameBufferShaders/frameBuffer.vert")
+set(SCREEN_FRAG_SHADER "${CMAKE_CURRENT_SOURCE_DIR}/shaders/frameBufferShaders/frameBuffer.frag")
+
 add_custom_command(
         OUTPUT ${SHADER_OUTPUT_FILE}
         COMMAND ${CMAKE_COMMAND}
         -DINPUT_VERT=${DEFAULT_VERT_SHADER}
         -DINPUT_FRAG=${DEFAULT_FRAG_SHADER}
+        -DINPUT_SCREEN_VERT=${SCREEN_VERT_SHADER}
+        -DINPUT_SCREEN_FRAG=${SCREEN_FRAG_SHADER}
         -DOUTPUT_FILE=${SHADER_OUTPUT_FILE}
         -P ${CMAKE_CURRENT_SOURCE_DIR}/embed_shaders.cmake
-        DEPENDS ${DEFAULT_VERT_SHADER} ${DEFAULT_FRAG_SHADER}
+        DEPENDS ${DEFAULT_VERT_SHADER} ${DEFAULT_FRAG_SHADER} ${SCREEN_VERT_SHADER} ${SCREEN_FRAG_SHADER}
         COMMENT "Generating embedded shader header"
         VERBATIM
 )

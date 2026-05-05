@@ -33,12 +33,16 @@ void Renderer::init()
     };
 
 
-
     allocateMem(100,200);
 
-    fbo.init();
-    fbo.Bind();
+    screenVAO.init();
+    screenVAO.Bind();
 
+    screenVBO.init(screenVertices , 24*sizeof(float));
+
+
+
+    //@todo i should change how binding and unbinding happens
     vao.init();
     vao.Bind();
 
@@ -50,9 +54,13 @@ void Renderer::init()
     vao.LinkAttrib(vbo, 2, 2, GL_FLOAT,  sizeof(Vertex), reinterpret_cast<void*>(6 * sizeof(float)));
 
 
-    vao.Unbind();
-    vbo.Unbind();
-    ebo.Unbind();
+    fbo.init();
+    fbo.Bind();
+    fbo.generateTexture();
+
+
+
+
 
 
 }
@@ -64,8 +72,11 @@ void Renderer::allocateMem( size_t sizeV, size_t sizeI)
 }
 
 void Renderer::DrawElements() const
-{
+{   fbo.Bind();
     vao.Bind();
+
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
 }
+
+
 

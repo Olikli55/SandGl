@@ -11,6 +11,7 @@ public:
 	VBO();
 
 	void init(const Vertex* vertices, GLsizeiptr size);
+	void init(const float* vertices, GLsizeiptr size);
 	void Bind() const;
 	void Unbind() const;
 	void Delete() const;
