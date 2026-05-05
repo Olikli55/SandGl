@@ -1,7 +1,3 @@
-//
-// Created by plutonium on 5/1/26.
-//
-
 #include "Renderer.h"
 
 
@@ -13,6 +9,7 @@ Renderer::~Renderer()
     vbo.Delete();
     ebo.Delete();
     vao.Delete();
+    fbo.Delete();
 
     vertices.clear();
     indices.clear();
@@ -24,26 +21,34 @@ void Renderer::init()
 
 
     vertices = {
-        0.5f,  0.5f, 0.0f,  // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-       -0.5f, -0.5f, 0.0f,  // bottom left
-       -0.5f,  0.5f, 0.0f   // top left
-        };
+        // positions                          // colors           // texture coords
+        {0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f}, // top right
+        {0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f}, // bottom right
+        {-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f}, // bottom left
+        {-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f}  // top left
+   };
     indices = {
-        0, 1, 3,  // first Triangle
-        1, 2, 3   // second Triangle
-        };
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
+    };
+
+
 
     allocateMem(100,200);
+
+    fbo.init();
+    fbo.Bind();
 
     vao.init();
     vao.Bind();
 
-    vbo.init(vertices.data(), vertices.size() * sizeof(GLfloat));
+    vbo.init(vertices.data(), vertices.size() * sizeof(Vertex));
     ebo.init(indices.data(), indices.size() * sizeof(GLuint));
 
-    vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, 3 * sizeof(GLfloat), nullptr);
-    //void LinkAttrib(VBO& VBO, GLuint layout, GLuint numComponents, GLenum type, GLsizeiptr stride, const void* offset);
+    vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(Vertex), nullptr);
+    vao.LinkAttrib(vbo, 1, 3, GL_FLOAT,  sizeof(Vertex), reinterpret_cast<void*>(3 * sizeof(float)));
+    vao.LinkAttrib(vbo, 2, 2, GL_FLOAT,  sizeof(Vertex), reinterpret_cast<void*>(6 * sizeof(float)));
+
 
     vao.Unbind();
     vbo.Unbind();

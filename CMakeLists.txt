@@ -34,7 +34,7 @@ add_custom_target(generate_shaders DEPENDS ${SHADER_OUTPUT_FILE})
 
 add_executable(${PROJECT_NAME}
         ${SRC_FILES}
-        glad/src/gl.c
+        include/glad/src/gl.c
         ${SHADER_OUTPUT_FILE}
 )
 
@@ -45,7 +45,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/rendering/buffers/
         ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/rendering/shader/
         ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/rendering/renderer/
-        ${CMAKE_CURRENT_SOURCE_DIR}/glad/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/ImageLoader/
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/glad/include/
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/stb_image/
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/util/
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE

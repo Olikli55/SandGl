@@ -1,11 +1,7 @@
-#include "glad/gl.h"
-#include <GLFW/glfw3.h>
 #include "Window.h"
-
-#include <stdexcept>
 #include <iostream>
 
-Window::Window(const int h, const int w) : HEIGHT(h), WIDTH(w) //constructors
+Window::Window(const int h, const int w, const Shader* shader) : HEIGHT(h), WIDTH(w), shader(shader) //constructors
 {
     //empty :>
 }
@@ -58,8 +54,37 @@ void Window::framebuffer_size_callback(GLFWwindow* window, const int width, cons
     glViewport(0, 0, width, height);
 }
 
-void Window::processInput() const
+void Window::processInput()
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+    {
         glfwSetWindowShouldClose(window, true);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        cameraPosX += 0.04f;
+        shader->setData("x", static_cast<float>(cameraPosX));
+        //std::cout << cameraPosX<< "\n";
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    {
+        cameraPosX -= 0.04f;
+        shader->setData("x", static_cast<float>(cameraPosX));
+        //std::cout << cameraPosX<< "\n ";
+
+    }
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    {
+        cameraPosY += 0.04f;
+        shader->setData("y", static_cast<float>(cameraPosY));
+        //std::cout << cameraPosY<< "\n";
+
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    {
+        cameraPosY -= 0.04f;
+        shader->setData("y", static_cast<float>(cameraPosY));
+        //std::cout << cameraPosY<< "\n";
+    }
+   // std::cout.flush();
 }

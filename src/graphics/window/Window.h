@@ -1,9 +1,11 @@
 #ifndef SANDGL_WINDOW_H
 #define SANDGL_WINDOW_H
 
-#include <glad/gl.h>
+#include  "shader.h"
+#include "glad/gl.h"
 #include <GLFW/glfw3.h>
-
+#include <stdexcept>
+#include <iostream>
 
 
 
@@ -12,12 +14,15 @@ class Window
 public:
      const unsigned int HEIGHT;
      const unsigned int WIDTH;
+     double cameraPosX = 0;
+     double cameraPosY = 0;
      GLFWwindow* window{};
+     const Shader* shader;
 
-     Window(int h, int w);
+     Window(int h, int w, const Shader* shader );
      ~Window();
      void init();
-     void processInput() const;
+     void processInput();
 
      
 private:

@@ -27,7 +27,7 @@ void Shader::use() const {
 }
 
 unsigned int Shader::CompileShader(unsigned int type, const char* source) {
-    unsigned int shader = glCreateShader(type);
+    const unsigned int shader = glCreateShader(type);
     glShaderSource(shader, 1, &source, nullptr);
     glCompileShader(shader);
     return shader;
@@ -71,4 +71,22 @@ void Shader::CheckCompileErrors(unsigned int shader, const std::string& type) {
             throw std::runtime_error("Shader linking failed");
         }
     }
+}
+
+
+void Shader::setData(const std::string &varName, bool data) const
+{
+    glUniform1i(glGetUniformLocation(ID, varName.c_str()), static_cast<int>(data));
+}
+ void Shader::setData(const std::string &varName, float data)const
+{
+    glUniform1f(glGetUniformLocation(ID, varName.c_str()), data);
+}
+ void Shader::setData(const std::string &varName, int data)const
+{
+    glUniform1i(glGetUniformLocation(ID, varName.c_str()), data);
+}
+ void Shader::setData(const std::string &varName, double data)const
+{
+    glUniform1d(glGetUniformLocation(ID, varName.c_str()), data);
 }

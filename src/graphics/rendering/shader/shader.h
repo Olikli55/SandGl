@@ -12,6 +12,12 @@ public:
 
     void init();
     void use() const;
+
+    void setData(const std::string &varName, bool data) const;
+    void setData(const std::string &varName, float data) const ;
+    void setData(const std::string &varName, int data) const ;
+    void setData(const std::string &varName, double data)const;
+
 private:
 
     const char* m_vertexSource;
