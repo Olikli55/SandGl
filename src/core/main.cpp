@@ -8,6 +8,9 @@
 #include "ImageTexture.h"
 #include "ImageLoader.h"
 
+void checkGLErrors(const char* operation);
+
+
 Shader shader(generated_shaders::default_vert, generated_shaders::default_frag);
 Shader screenShader(generated_shaders::screen_vert, generated_shaders::default_frag);
 Renderer renderer;
@@ -26,13 +29,12 @@ int main(){
         std::cerr << error.what() << std::endl;
         return -1;
     }
+    checkGLErrors("after init classes");
 
 
-    shader.use();
-    screenShader.use();
+    shader.use();    checkGLErrors("shader.use init");
+    screenShader.use();    checkGLErrors("shader.use init");
 
-
-    //@todo i think something is worng i dont see the line in the middle of the screen
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 
@@ -44,31 +46,33 @@ int main(){
         //==============//
         const auto currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastTime;
-        lastTime = deltaTime;
-
+        lastTime = currentFrame;
+        checkGLErrors("after delta");
         //proces input
         //============//
         window.processInput();
 
 
 
+        //@todo make this whole function commented and split it into smaller more understandable functions
+        renderer.fbo.Bind(); checkGLErrors("fbo.bind");
+        //glEnable(GL_DEPTH_TEST); // future proofing for 3D
 
         glClearColor(0.2f, 0.2333f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        shader.use();
-        glBindTexture(GL_TEXTURE_2D, imageTexture.ID);
+        shader.use(); checkGLErrors("sahder.use");
+        glBindTexture(GL_TEXTURE_2D, imageTexture.ID); checkGLErrors("glbindTexture");
+        renderer.DrawElements(); checkGLErrors("draw elements");
+        renderer.fbo.Unbind(); checkGLErrors("fbo.unbind");
+        //glDisable(GL_DEPTH_TEST); // future proofing for 3D
 
 
-        renderer.DrawElements();
-        //@todo make this whole function commented and split it into smaller more understandable functions
-        renderer.fbo.Unbind();
-        glDisable(GL_DEPTH_TEST); // future proofing for 3D
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        screenShader.use();
-        glBindVertexArray(renderer.screenVAO.ID);
+        screenShader.use(); checkGLErrors("screenshader.use");
+        renderer.screenVAO.Bind();
         glBindTexture(GL_TEXTURE_2D, renderer.fbo.textureColorBufferID);
         glDrawArrays(GL_TRIANGLES, 0,6);
 
@@ -86,4 +90,15 @@ int main(){
 
     //END
     return 0;
+}
+
+
+void checkGLErrors(const char* operation) {
+    GLenum error;
+    bool hasError = false;
+    while ((error = glGetError()) != GL_NO_ERROR) {
+        std::cerr << "OpenGL Error after '" << operation << "': " << error << std::endl;
+        hasError = true;
+    }
+    if (hasError) std::exit(-1);  // Halt on errors
 }

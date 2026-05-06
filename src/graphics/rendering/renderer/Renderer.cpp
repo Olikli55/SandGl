@@ -18,6 +18,15 @@ Renderer::~Renderer()
 
 void Renderer::init()
 {
+    //generate all of the buffers
+    //===========================//
+    screenVAO.init();
+    screenVBO.init();
+    vbo.init();
+    vao.init();
+    ebo.init();
+    fbo.init();
+
 
 
     vertices = {
@@ -35,28 +44,32 @@ void Renderer::init()
 
     allocateMem(100,200);
 
-    screenVAO.init();
     screenVAO.Bind();
-
-    screenVBO.init(screenVertices , 24*sizeof(float));
+    screenVBO.Bind();
+    screenVBO.setBufferData(screenVertices , 24*sizeof(float));
 
 
 
     //@todo i should change how binding and unbinding happens
-    vao.init();
+
     vao.Bind();
 
-    vbo.init(vertices.data(), vertices.size() * sizeof(Vertex));
-    ebo.init(indices.data(), indices.size() * sizeof(GLuint));
+    vbo.Bind();
+    vbo.setBufferData(vertices.data(), vertices.size() * sizeof(Vertex));
+
+    ebo.Bind();
+    ebo.setBufferData(indices.data(), indices.size() * sizeof(GLuint));
+
+
 
     vao.LinkAttrib(vbo, 0, 3, GL_FLOAT, sizeof(Vertex), nullptr);
     vao.LinkAttrib(vbo, 1, 3, GL_FLOAT,  sizeof(Vertex), reinterpret_cast<void*>(3 * sizeof(float)));
     vao.LinkAttrib(vbo, 2, 2, GL_FLOAT,  sizeof(Vertex), reinterpret_cast<void*>(6 * sizeof(float)));
 
 
-    fbo.init();
     fbo.Bind();
     fbo.generateTexture();
+
 
 
 
@@ -72,9 +85,8 @@ void Renderer::allocateMem( size_t sizeV, size_t sizeI)
 }
 
 void Renderer::DrawElements() const
-{   fbo.Bind();
+{
     vao.Bind();
-
     glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
 }
 

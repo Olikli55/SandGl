@@ -29,11 +29,11 @@ out vec4 FragColor;
 in vec3 Color;
 in vec2 TexCoord;
 
-uniform sampler2D Texture;
+uniform sampler2D texture1;
 
 void main()
 {
-    FragColor = texture(Texture, TexCoord) * vec4(Color, 1.0);
+    FragColor = texture(texture1, TexCoord) * vec4(Color, 1.0);
 }
 )GLSL";
 
@@ -44,22 +44,23 @@ layout (location = 1) in vec2 aTexCoords;
 
 out vec2 TexCoords;
 
-void main() {
-    gl_Position = vec4(aPos.x, aPos.y,0.0, 1.0);
+void main()
+{
     TexCoords = aTexCoords;
+    gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);
 }
-
 )GLSL";
 
 inline constexpr const char* screen_frag = R"GLSL(
 #version 400 core
-out vec2 FragColor;
+out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform smapler2D screenTexture;
 
 void main() {
-    FragColor = texture(screenTexture, TexCoords);
+    vec3 col = texture(screenTexture, TexCoords).rgb;
+    FragColor = vec4(col, 1.0);
 }
 
 )GLSL";

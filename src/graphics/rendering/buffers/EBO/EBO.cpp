@@ -3,11 +3,12 @@
 
 EBO::EBO()= default;
 
-void EBO::init(const GLuint* indices, GLsizeiptr size)
+void EBO::setBufferData(const GLuint* indices, GLsizeiptr size)
 {
-	glGenBuffers(1, &ID);
-	Bind();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, size, indices, GL_STATIC_DRAW);
+}
+void EBO::init(){
+	glGenBuffers(1, &ID);
 }
 
 void EBO::Bind() const

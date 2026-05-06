@@ -10,7 +10,8 @@ public:
 
 	EBO();
 
-	void init(const GLuint* indices, GLsizeiptr size);
+	void setBufferData(const GLuint* indices, GLsizeiptr size);
+	void init();
 	void Bind() const;
 	void Unbind() const;
 	void Delete() const;

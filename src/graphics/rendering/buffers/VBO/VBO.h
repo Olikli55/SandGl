@@ -10,8 +10,9 @@ public:
 	GLuint ID{}; // 0
 	VBO();
 
-	void init(const Vertex* vertices, GLsizeiptr size);
-	void init(const float* vertices, GLsizeiptr size);
+	void init();
+	void setBufferData(const Vertex* vertices, GLsizeiptr size);
+	void setBufferData(const float* vertices, GLsizeiptr size);
 	void Bind() const;
 	void Unbind() const;
 	void Delete() const;
