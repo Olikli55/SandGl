@@ -2,7 +2,7 @@
 out vec4 FragColor;
 in vec2 TexCoords;
 
-uniform smapler2D screenTexture;
+uniform sampler2D screenTexture;
 
 void main() {
     vec3 col = texture(screenTexture, TexCoords).rgb;

@@ -12,7 +12,7 @@ void checkGLErrors(const char* operation);
 
 
 Shader shader(generated_shaders::default_vert, generated_shaders::default_frag);
-Shader screenShader(generated_shaders::screen_vert, generated_shaders::default_frag);
+Shader screenShader(generated_shaders::screen_vert, generated_shaders::screen_frag);
 Renderer renderer;
 Window window(800, 600, &shader);
 ImageTexture imageTexture;
@@ -35,7 +35,6 @@ int main(){
     shader.use();    checkGLErrors("shader.use init");
     screenShader.use();    checkGLErrors("shader.use init");
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 
 
