@@ -2,8 +2,9 @@
 #define SANDGL_WINDOW_H
 
 #include  "shader.h"
-#include "glad/gl.h"
+#include "glad/glad.h"
 #include <GLFW/glfw3.h>
+#include "Renderer.h"
 #include <stdexcept>
 #include <iostream>
 
@@ -18,8 +19,7 @@ public:
      double cameraPosY = 0;
      GLFWwindow* window{};
      const Shader* shader;
-
-     Window(int h, int w, const Shader* shader );
+     Window(int h, int w, const Shader* shader);
      ~Window();
      void init();
      void processInput();

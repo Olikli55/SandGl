@@ -2,7 +2,7 @@
 #define SANDGL_SHADER_H
 
 #include <string>
-#include <glad/gl.h>
+#include <glad/glad.h>
 
 class Shader {
 public:

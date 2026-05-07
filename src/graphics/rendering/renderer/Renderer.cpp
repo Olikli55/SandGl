@@ -47,10 +47,11 @@ void Renderer::init()
     screenVAO.Bind();
     screenVBO.Bind();
     screenVBO.setBufferData(screenVertices , 24*sizeof(float));
+    screenVAO.LinkAttrib(screenVBO, 0, 2, GL_FLOAT, 4 * sizeof(float), nullptr);
+    screenVAO.LinkAttrib(screenVBO, 1, 2, GL_FLOAT, 4 * sizeof(float), reinterpret_cast<void*>(2 * sizeof(float)));
 
 
 
-    //@todo i should change how binding and unbinding happens
 
     vao.Bind();
 
@@ -68,14 +69,7 @@ void Renderer::init()
 
 
     fbo.Bind();
-    fbo.generateTexture();
-
-
-
-
-
-
-
+    fbo.generateTexture(800,600);
 }
 
 void Renderer::allocateMem( size_t sizeV, size_t sizeI)

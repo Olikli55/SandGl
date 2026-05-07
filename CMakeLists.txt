@@ -39,7 +39,7 @@ add_custom_target(generate_shaders DEPENDS ${SHADER_OUTPUT_FILE})
 
 add_executable(${PROJECT_NAME}
         ${SRC_FILES}
-        include/glad/src/gl.c
+        include/glad/src/glad.c
         ${SHADER_OUTPUT_FILE}
 )
 

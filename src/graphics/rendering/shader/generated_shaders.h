@@ -5,7 +5,7 @@
 namespace generated_shaders {
 
 inline constexpr const char* default_vert = R"GLSL(
-#version 400 core
+#version 460 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec3 aColor;
 layout (location = 2) in vec2 aTexCoord;
@@ -24,7 +24,7 @@ void main()
 )GLSL";
 
 inline constexpr const char* default_frag = R"GLSL(
-#version 400 core
+#version 460 core
 out vec4 FragColor;
 in vec3 Color;
 in vec2 TexCoord;
@@ -38,7 +38,7 @@ void main()
 )GLSL";
 
 inline constexpr const char* screen_vert = R"GLSL(
-#version 400 core
+#version 460 core
 layout (location = 0) in vec2 aPos;
 layout (location = 1) in vec2 aTexCoords;
 
@@ -52,7 +52,7 @@ void main()
 )GLSL";
 
 inline constexpr const char* screen_frag = R"GLSL(
-#version 400 core
+#version 460 core
 out vec4 FragColor;
 in vec2 TexCoords;
 

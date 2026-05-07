@@ -1,7 +1,7 @@
 #ifndef SANDGL_FBO_H
 #define SANDGL_FBO_H
 
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stdexcept>
 #include <iostream>
@@ -14,7 +14,7 @@ public:
     unsigned int textureColorBufferID{};
     FBO();
     void init();
-    void generateTexture();
+    void generateTexture(int width, int height) ;
     void Delete() const;
     void Bind() const;
     void Unbind() const;

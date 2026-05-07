@@ -2,7 +2,7 @@
 #define VBO_CLASS_H
 
 #include "vertex.h"
-#include<glad/gl.h>
+#include<glad/glad.h>
 //VERTEX BUFFER OBJECT
 class VBO
 {	

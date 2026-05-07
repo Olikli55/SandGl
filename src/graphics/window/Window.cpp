@@ -1,8 +1,9 @@
 #include "Window.h"
 #include <iostream>
 
-Window::Window(const int h, const int w, const Shader* shader) : HEIGHT(h), WIDTH(w), shader(shader) //constructors
+Window::Window(const int h, const int w, const Shader* shader) : HEIGHT(h), WIDTH(w), shader(shader)  //constructors
 {
+
     //empty :>
 }
 
@@ -25,7 +26,7 @@ void Window::init()
     }
     // set the version
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // create a window pointer
@@ -37,12 +38,11 @@ void Window::init()
     glfwMakeContextCurrent(window); // apply the window
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // set a function for resizing the window
 
-    if (!gladLoadGL(glfwGetProcAddress)) {
+    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         throw std::runtime_error("failed to load glad");
     }
     glViewport(0, 0, 800, 600);
-
-
+    
 }
 
 void Window::glfwErrorCallback(const int error, const char* description) {
@@ -52,6 +52,7 @@ void Window::glfwErrorCallback(const int error, const char* description) {
 void Window::framebuffer_size_callback(GLFWwindow* window, const int width, const int height)
 {
     glViewport(0, 0, width, height);
+
 }
 
 void Window::processInput()
@@ -60,6 +61,7 @@ void Window::processInput()
     {
         glfwSetWindowShouldClose(window, true);
     }
+    return;
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
     {
         cameraPosX += 0.04f;
