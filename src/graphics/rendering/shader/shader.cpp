@@ -90,3 +90,8 @@ void Shader::setData(const std::string &varName, bool data) const
 {
     glUniform1d(glGetUniformLocation(ID, varName.c_str()), data);
 }
+
+void Shader::setData(const std::string &varName, float data0, float data1)const
+{
+    glUniform2f(glGetUniformLocation(ID, varName.c_str()), data0, data1);
+}

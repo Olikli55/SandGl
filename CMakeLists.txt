@@ -10,6 +10,8 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS "src/*.cpp" "src/*.c")
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 3.3 REQUIRED)
+find_package(glm CONFIG REQUIRED)
+
 
 # ---- Generate embedded shader header ----
 set(SHADER_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/rendering/shader")
@@ -54,9 +56,11 @@ target_include_directories(${PROJECT_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/include/glad/include/
         ${CMAKE_CURRENT_SOURCE_DIR}/include/stb_image/
         ${CMAKE_CURRENT_SOURCE_DIR}/src/util/
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/game/grid/
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
+        glm::glm
         OpenGL::GL
         glfw
         ${CMAKE_DL_LIBS}

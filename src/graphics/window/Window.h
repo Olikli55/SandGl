@@ -13,16 +13,20 @@
 class Window
 {
 public:
-     const unsigned int HEIGHT;
-     const unsigned int WIDTH;
+     double mousePosX{}, mousePosY{};
+     unsigned int height;
+     unsigned int width;
      double cameraPosX = 0;
      double cameraPosY = 0;
      GLFWwindow* window{};
      const Shader* shader;
-     Window(int h, int w, const Shader* shader);
+     Renderer* renderer;
+     Window(int h, int w, const Shader* shader, Renderer* renderer_);
      ~Window();
      void init();
      void processInput();
+     bool pressedOnce(int key) const;
+     void static cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 
      
 private:

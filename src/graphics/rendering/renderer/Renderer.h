@@ -6,21 +6,29 @@
 #include "EBO/EBO.h"
 #include <vector>
 #include <GLFW/glfw3.h>
-#include "vertex.h"
 #include "FBO/FBO.h"
 #include "stb_image.h"
+#include "shader.h"
+#include <glm/vec3.hpp>
 
 class Renderer{
 
 public:
+    static constexpr int GRID_H = 200;
+    static constexpr int GRID_W = 200;
+    float cellSize = 2.0f / static_cast<float>(GRID_W);
+
     Renderer();
     ~Renderer();
-    void init();
+    void init(const Shader *shader, const Shader* screenShader);
     void allocateMem(size_t sizeV, size_t sizeI);
-
-
+    void onFramebufferResize(int width, int height);
+    void renderUi() const;
+    const Shader* shader{};
+    const Shader* screenShader{};
     void DrawElements() const;
-    std::vector<Vertex> vertices{};
+    void updateCells(const unsigned int* type);
+    std::vector<float> vertices{};
     std::vector<GLuint> indices{};
     float screenVertices[24] = {
         -1.0f,  1.0f,  0.0f, 1.0f,
@@ -34,13 +42,13 @@ public:
 
 
 
- //@todo temp
+
+private:
+    VBO offsetVBO;
+
     VAO screenVAO;
     VBO screenVBO;
     FBO fbo;
-
-private:
-
     VAO vao;
     VBO vbo;
     EBO ebo;
