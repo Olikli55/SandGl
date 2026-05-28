@@ -13,10 +13,20 @@ out vec3 Color;
 
 uniform mat4 uProj;
 uniform vec2 uCellSize; //in world units
-vec2 pos = aPos * uCellSize + instanceOffset; //instanceOffset in world units
+uniform ivec2 uGridSize; // (GRID_W, GRID_H)
+uniform vec2 uCamera;
 
 void main()
 {
+    int id = gl_InstanceID;
+    int x  = id % uGridSize.x;
+    int y  = id / uGridSize.x;
+
+    vec2 cellOrigin = vec2(x, y) * uCellSize;
+    vec2 local01 = (aPos * 0.5) + 0.5;
+
+    vec2 pos = (cellOrigin + local01 * uCellSize) + uCamera;
+
     gl_Position = uProj * vec4(pos, 0.0, 1.0);
     switch(aType){
         case 0:
