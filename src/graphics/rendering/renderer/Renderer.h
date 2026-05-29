@@ -9,14 +9,13 @@
 #include "FBO/FBO.h"
 #include "stb_image.h"
 #include "shader.h"
-#include <glm/vec3.hpp>
 
 class Renderer{
 
 public:
     static constexpr int GRID_H = 200;
     static constexpr int GRID_W = 200;
-    float cellSize = 2.0f / static_cast<float>(GRID_W);
+    float cellSize = 1.0f;
 
     Renderer();
     ~Renderer();

@@ -34,7 +34,6 @@ int main(){
         return -1;
     }
 
-    unsigned int cells[20][20];
 
 
     screenShader.use();

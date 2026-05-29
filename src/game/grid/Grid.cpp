@@ -13,11 +13,8 @@ void Grid::update(){
 
     for (int y = 0; y < GRID_H; ++y){
         for (int x = 0; x < GRID_W; ++x){
-            bufferGrid[y][x] = (x+y) % 4;
-            if (x == 0 || y == 0)
-            {
-                bufferGrid[y][x] = 1;
-            }
+            bufferGrid[y][x] = 1;
+
 
             switch (grid[y][x]){
 
@@ -28,7 +25,6 @@ void Grid::update(){
             }
         }
     }
-    grid[GRID_H-1][GRID_W /2-1] = 0;
 
     std::memcpy(grid , bufferGrid, sizeof(grid));
 

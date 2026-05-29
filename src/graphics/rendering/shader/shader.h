@@ -18,6 +18,9 @@ public:
     void setData(const std::string &varName, int data) const ;
     void setData(const std::string &varName, double data)const;
     void setData(const std::string &varName, float  data0, float data1 )const;
+    void setData(const std::string &varName, int  data0, int data1 )const;
+    void setData(const std::string &varName, const float* mat4x4) const;
+
 
 private:
 

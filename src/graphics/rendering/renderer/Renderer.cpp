@@ -1,5 +1,9 @@
 #include "Renderer.h"
 
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp> // glm::ortho
+#include <glm/gtc/type_ptr.hpp>         // glm::value_ptr
 
 
 Renderer::Renderer() = default;
@@ -33,12 +37,12 @@ void Renderer::init(const Shader *shader_, const Shader* screenShader_)
 
 
 
-    vertices = { // simple square
-        1.0,  1.0,
-        1.0, -1.0,
-       -1.0, -1.0,
-       -1.0,  1.0
-   };
+    vertices = {
+        1.0f, 1.0f,  // top-right
+        1.0f, 0.0f,  // bottom-right
+        0.0f, 0.0f,  // bottom-left
+        0.0f, 1.0f   // top-left
+    };
     indices = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
@@ -79,6 +83,20 @@ void Renderer::init(const Shader *shader_, const Shader* screenShader_)
 
     fbo.Bind();
     fbo.generateTexture(800,600);
+
+    const float worldW = GRID_W * cellSize;
+    const float worldH = GRID_H * cellSize;
+
+    glm::mat4 proj = glm::ortho(
+        0.0f, worldW,  // left, right
+        worldH, 0.0f,  //bottom, top  (this flips Y => top-left origin)
+        -1.0f, 1.0f    //near, far
+    );
+    shader->use();
+    shader->setData("uProj", glm::value_ptr(proj));
+    shader->setData("uGridSize", GRID_W, GRID_H);
+    shader->setData("uCellSize", cellSize, cellSize);
+    shader->setData("uCamera", 0.0f, 0.0f);
 }
 
 void Renderer::allocateMem( size_t sizeV, size_t sizeI)
@@ -120,6 +138,17 @@ void Renderer::onFramebufferResize(int width, int height){
 
 
     fbo.Unbind();
+
+    const float worldW = GRID_W * cellSize;
+    const float worldH = GRID_H * cellSize;
+
+    glm::mat4 proj = glm::ortho(
+        0.0f, worldW,  // left, right
+        worldH, 0.0f,  //bottom, top  (this flips Y => top-left origin)
+        -1.0f, 1.0f    //near, far
+    );
+    shader->use();
+    shader->setData("uProj", glm::value_ptr(proj));
 }
 
 
