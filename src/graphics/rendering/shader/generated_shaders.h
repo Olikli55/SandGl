@@ -36,7 +36,7 @@ void main()
            Color = vec3(0.8863, 0.7922, 0.4627); // sand
             break;
         case 2:
-            Color = vec3(0.1, 0.1, 0.1); //solid
+            Color = vec3(0.15, 0.15, 0.15); //solid
             break;
         case 3:
             Color = vec3(0.0, 1.0, 1.0);

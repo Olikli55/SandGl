@@ -18,8 +18,8 @@ public:
     std::mt19937 rng;
 
 
-    static constexpr int GRID_H = 1000;
-    static constexpr int GRID_W = 1000;
+    static constexpr int GRID_H = 400;
+    static constexpr int GRID_W = 400;
     unsigned int grid[GRID_H][GRID_W]{};
     unsigned int bufferGrid[GRID_H][GRID_W]{};
 
