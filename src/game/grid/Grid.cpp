@@ -44,7 +44,6 @@ void Grid::update(){
     // grid[0][GRID_H/2-4] = 1;
     // grid[0][GRID_H/2-5] = 1;
     // grid[0][GRID_H/2-6] = 1;
-    std::memcpy(bufferGrid, grid, sizeof(grid));
     for (int y = 0; y < GRID_H; ++y){
         for (int x = 0; x < GRID_W; ++x){
 
