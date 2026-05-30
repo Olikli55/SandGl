@@ -1,7 +1,7 @@
 #include "Window.h"
 #include <iostream>
 
-Window::Window(const int h, const int w, const Shader* shader,  Renderer* renderer_) : height(h), width(w), shader(shader), renderer(renderer_)  //constructors
+Window::Window(const int h, const int w, const Shader* shader,  Renderer* renderer_, Grid* gridManager) : height(h), width(w), shader(shader), renderer(renderer_), grid(gridManager) //constructors
 {
 
     //empty :>
@@ -46,7 +46,7 @@ void Window::init()
     glfwSetWindowUserPointer(window, const_cast<Window*>(this));
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback); // set a function for resizing the window
     glfwSetCursorPosCallback(window, cursor_position_callback); // set a mouse pos callback
-
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 }
 //Input
 //==========/
@@ -78,9 +78,25 @@ void Window::cursor_position_callback(GLFWwindow* window, double xPos, double yP
 {
 
     if (auto* windowClass  = static_cast<Window*>(glfwGetWindowUserPointer(window))) {
-        std::cout << xPos/windowClass->width << ' ' << yPos /windowClass->height << std::endl;
-        windowClass->mousePosX = xPos;
-        windowClass->mousePosY = yPos;
+
+
+        const auto winH = static_cast<double>(windowClass->height);
+        const auto winW = static_cast<double>(windowClass->width);
+
+        constexpr double worldH = Renderer::GRID_H * Renderer::cellSize;
+        constexpr double worldW = Renderer::GRID_W * Renderer::cellSize;
+
+        const double camX = 0.0f;
+        const double camY = 0.0f;
+
+        const double worldX = (xPos/winW) * worldW - camX;
+        const double worldY = (yPos/winH) * worldH - camY;
+
+        const int cellX = static_cast<int>(worldX/Renderer::cellSize);
+        const int cellY = static_cast<int>(worldY/Renderer::cellSize);
+        windowClass->mousePosX = cellX;
+        windowClass->mousePosY = cellY;
+        std::cout << cellX << " " << cellY << std::endl;
 
     }
 
@@ -102,3 +118,19 @@ void Window::framebuffer_size_callback(GLFWwindow* window, const int _width, con
 
 
 }
+void Window::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+    if (action == GLFW_PRESS)
+    {
+        if (auto* windowClass  = static_cast<Window*>(glfwGetWindowUserPointer(window))) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT){
+                windowClass->grid->bufferGrid[windowClass->mousePosY][windowClass->mousePosX] = 1;
+
+            }else if (button == GLFW_MOUSE_BUTTON_RIGHT){
+                windowClass->grid->bufferGrid[windowClass->mousePosY][windowClass->mousePosX] = 0;
+
+            }
+        }
+    }
+}
+

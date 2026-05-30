@@ -83,6 +83,7 @@ void Renderer::init(const Shader *shader_, const Shader* screenShader_)
 
     fbo.Bind();
     fbo.generateTexture(800,600);
+    fbo.Unbind();
 
     const float worldW = GRID_W * cellSize;
     const float worldH = GRID_H * cellSize;
@@ -139,16 +140,7 @@ void Renderer::onFramebufferResize(int width, int height){
 
     fbo.Unbind();
 
-    const float worldW = GRID_W * cellSize;
-    const float worldH = GRID_H * cellSize;
 
-    glm::mat4 proj = glm::ortho(
-        0.0f, worldW,  // left, right
-        worldH, 0.0f,  //bottom, top  (this flips Y => top-left origin)
-        -1.0f, 1.0f    //near, far
-    );
-    shader->use();
-    shader->setData("uProj", glm::value_ptr(proj));
 }
 
 
