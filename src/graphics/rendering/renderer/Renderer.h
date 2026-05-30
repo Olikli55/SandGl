@@ -13,9 +13,9 @@
 class Renderer{
 
 public:
-    static constexpr int GRID_H = 200;
-    static constexpr int GRID_W = 200;
-    float cellSize = 1.0f;
+    static constexpr int GRID_H = 600;
+    static constexpr int GRID_W = 600;
+    static constexpr float cellSize = 1.0f;
 
     Renderer();
     ~Renderer();

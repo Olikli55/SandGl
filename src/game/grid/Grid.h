@@ -4,9 +4,10 @@
 
 #ifndef SANDGL_GRID_H
 #define SANDGL_GRID_H
-#include "cellState.h"
-#include <cstring>
+
 #include <cstdint>
+#include <random>
+
 
 
 class Grid
@@ -14,10 +15,11 @@ class Grid
 public:
     Grid();
     ~Grid();
+    std::mt19937 rng;
 
 
-    static constexpr int GRID_H = 200;
-    static constexpr int GRID_W = 200;
+    static constexpr int GRID_H = 600;
+    static constexpr int GRID_W = 600;
     unsigned int grid[GRID_H][GRID_W]{};
     unsigned int bufferGrid[GRID_H][GRID_W]{};
 
@@ -30,7 +32,7 @@ private:
 
 };
 
-// ParticleType.h
+// ParticleType.h unused
 enum class CellType : uint8_t {
     Air   = 0,
     Sand  = 1,

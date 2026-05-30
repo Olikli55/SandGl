@@ -15,14 +15,15 @@ void main()
     int x  = id % uGridSize.x;
     int y  = id / uGridSize.x;
 
-    vec2 cellOrigin = vec2(x, y) * uCellSize;
 
-    vec2 pos = (cellOrigin + aPos) + uCamera;
+    vec2 cellOrigin = vec2(x, y) ;
+
+    vec2 pos = (cellOrigin + aPos ) + uCamera;
 
     gl_Position = uProj * vec4(pos, 0.0, 1.0);
     switch(aType){
         case 0:
-            Color = vec3(0.0, 0.5, 0.0); //air
+            Color = vec3(0.0, 0.0, 0.0); //air
             break;
         case 1:
            Color = vec3(0.8863, 0.7922, 0.4627); // sand

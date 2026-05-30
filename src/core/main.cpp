@@ -12,9 +12,9 @@
 Shader shader(generated_shaders::default_vert, generated_shaders::default_frag);
 Shader screenShader(generated_shaders::screen_vert, generated_shaders::screen_frag);
 Renderer renderer;
-Window window(800, 600, &screenShader, &renderer);
-ImageTexture imageTexture;
 Grid gridManager;
+Window window(800, 600, &screenShader, &renderer, &gridManager);
+ImageTexture imageTexture;
 float deltaTime = 0;
 float lastTime = 0;
 float timer = 0;
@@ -58,10 +58,10 @@ int main(){
         {
             gridManager.update();
         }
-//        gridManager.update();
+        gridManager.update();
 
 
-        renderer.updateCells(&gridManager.grid[0][0]);
+        renderer.updateCells(&gridManager.bufferGrid[0][0]);
 
 
         //draw elements into FBO
