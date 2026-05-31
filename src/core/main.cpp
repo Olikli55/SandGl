@@ -8,6 +8,8 @@
 #include "ImageTexture.h"
 #include "ImageLoader.h"
 #include "Grid.h"
+#include <thread>
+#include <chrono>
 
 Shader shader(generated_shaders::default_vert, generated_shaders::default_frag);
 Shader screenShader(generated_shaders::screen_vert, generated_shaders::screen_frag);
@@ -20,9 +22,10 @@ float lastTime = 0;
 float timer = 0;
 unsigned int temp = 0;
 unsigned int tempy = 4;
+constexpr double targetFPS = 60.0;
+constexpr auto targetFrame = std::chrono::duration<double>(1.0 / targetFPS);
 int main(){
     try{
-        //grid.init();
         window.init();
         shader.init();
         screenShader.init();
@@ -42,42 +45,51 @@ int main(){
         glUniform1i(loc, 0);
     }
 
+    using clock = std::chrono::steady_clock;
+    auto nextPresent = clock::now();              // time of next render
+    auto lastPresent = clock::now();              // for render delta if you want it
+
 
     //LOOP=====================================LOOP//
     while(!glfwWindowShouldClose(window.window))
     {
         //time logic
         //==============//
-        const auto currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastTime;
-        lastTime = currentFrame;
-        timer += deltaTime;
+        //const auto currentFrame = static_cast<float>(glfwGetTime());
+        //deltaTime = currentFrame - lastTime;
+        //lastTime = currentFrame;
+        //timer += deltaTime;
 
 
-        if (window.pressedOnce(GLFW_KEY_SPACE))
-        {
-            gridManager.update();
+        if (window.pressedOnce(GLFW_KEY_SPACE)){
+            //gridManager.update();
         }
         gridManager.update();
 
-
-        renderer.updateCells(&gridManager.bufferGrid[0][0]);
-
-
-        //draw elements into FBO
-        //======================//
-
-        glBindTexture(GL_TEXTURE_2D, imageTexture.ID);
-        renderer.DrawElements();
+        if (auto now = clock::now();
+            now >= nextPresent)
+        {
+            //update the buffers with new data
+            //=================================//
+            renderer.updateCells(&gridManager.bufferGrid[0][0]);
 
 
-        //proces input
-        //============//
-        window.processInput();
+            //draw elements into FBO
+            //======================//
 
-        //render the FBO on top of everything
-        //===================================//
-        renderer.renderUi();
+            glBindTexture(GL_TEXTURE_2D, imageTexture.ID);
+            renderer.DrawElements();
+
+
+            //proces input
+            //============//
+            window.processInput();
+
+            //render the FBO on top of everything
+            //===================================//
+            renderer.renderUi();
+        }
+
 
         //glfw - swap buffers and poll inpout + output events (keypress, mouse move ....);
         //================================================================================//

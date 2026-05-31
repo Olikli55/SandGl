@@ -36,7 +36,7 @@ void Window::init()
         throw std::runtime_error("failed to init glfw");
     }
     glfwMakeContextCurrent(window); // apply the window
-
+    glfwSwapInterval(1); // 1 = vsync on
 
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         throw std::runtime_error("failed to load glad");

@@ -14,19 +14,17 @@ Grid::Grid(): rng(std::random_device{}())
 
         }
     }
-    constexpr int startY = GRID_H * 0.7;   // half down
-    constexpr int lineSpacing = 2;       // every 2 columns => x = 0,2,4,... (change as desired)
-
+    constexpr int startY = GRID_H * 0.7;
 
     for (int y = startY; y < GRID_H; ++y)
     {
         for (int x = 0; x < GRID_W; ++x)
         {
-            if (x % lineSpacing == 0){
-                bufferGrid[y][x] = 2u;
+            if (x % 2 == 0){
+                bufferGrid[y][x] = 2;
             }else
             {
-                bufferGrid[y][x] = 0u;
+                bufferGrid[y][x] = 0;
             }
 
         }
