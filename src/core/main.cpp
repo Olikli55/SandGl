@@ -30,7 +30,7 @@ int main(){
         shader.init();
         screenShader.init();
         renderer.init(&shader, &screenShader);
-        imageTexture = ImageLoader::loadImage("../assets/textures/container.jpg"); //current path is "SandGl/cmake-build-debug" therefore i need to use the ..
+        //imageTexture = ImageLoader::loadImage("../assets/textures/container.jpg"); //current path is "SandGl/cmake-build-debug" therefore i need to use the ..
 
     }catch (const std::runtime_error& error) {
         std::cerr << error.what() << std::endl;
