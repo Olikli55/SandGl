@@ -7,7 +7,7 @@
 
 #include <cstdint>
 #include <random>
-
+#include "vector2D.h"
 
 
 class Grid
@@ -18,17 +18,22 @@ public:
     std::mt19937 rng;
 
 
-    static constexpr int GRID_H = 400;
-    static constexpr int GRID_W = 400;
+    static constexpr int GRID_H = 10;
+    static constexpr int GRID_W = 10;
     unsigned int grid[GRID_H][GRID_W]{};
     unsigned int bufferGrid[GRID_H][GRID_W]{};
+    void switchCells(Vector2D pos, Dir dir);
+    void moveWaterUp(Vector2D pos);
 
     void update();
-    void init();
-    void updateSand(int x, int y);
+
 private:
-    bool isCellEmpty(int x, int y);
-    unsigned int getCellID( int x,  int y) const;
+    void updateSand(Vector2D pos);
+    void updateWater(Vector2D pos);
+    void moveCell(Vector2D pos, Dir dir);
+    void pushWaterUp(Vector2D pos);
+    bool isCellEmpty(Vector2D pos) const;
+    unsigned int getCellID( Vector2D pos) const;
 
 };
 

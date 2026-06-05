@@ -86,8 +86,8 @@ void Window::cursor_position_callback(GLFWwindow* window, double xPos, double yP
         constexpr double worldH = Renderer::GRID_H * Renderer::cellSize;
         constexpr double worldW = Renderer::GRID_W * Renderer::cellSize;
 
-        const double camX = 0.0f;
-        const double camY = 0.0f;
+        constexpr double camX = 0.0f;
+        constexpr double camY = 0.0f; // future update
 
         const double worldX = (xPos/winW) * worldW - camX;
         const double worldY = (yPos/winH) * worldH - camY;
@@ -96,8 +96,6 @@ void Window::cursor_position_callback(GLFWwindow* window, double xPos, double yP
         const int cellY = static_cast<int>(worldY/Renderer::cellSize);
         windowClass->mousePosX = cellX;
         windowClass->mousePosY = cellY;
-        std::cout << cellX << " " << cellY << std::endl;
-
     }
 
 }
@@ -124,10 +122,10 @@ void Window::mouse_button_callback(GLFWwindow* window, int button, int action, i
     {
         if (auto* windowClass  = static_cast<Window*>(glfwGetWindowUserPointer(window))) {
             if (button == GLFW_MOUSE_BUTTON_LEFT){
-                windowClass->grid->bufferGrid[windowClass->mousePosY][windowClass->mousePosX] = 1;
+                windowClass->grid->bufferGrid[windowClass->mousePosY][windowClass->mousePosX] = 2;
 
             }else if (button == GLFW_MOUSE_BUTTON_RIGHT){
-                windowClass->grid->bufferGrid[windowClass->mousePosY][windowClass->mousePosX] = 0;
+                windowClass->grid->bufferGrid[windowClass->mousePosY][windowClass->mousePosX] = 1;
 
             }
         }

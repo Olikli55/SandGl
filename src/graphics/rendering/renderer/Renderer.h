@@ -13,8 +13,8 @@
 class Renderer{
 
 public:
-    static constexpr int GRID_H =400;
-    static constexpr int GRID_W = 400;
+    static constexpr int GRID_H =10;
+    static constexpr int GRID_W =10;
     static constexpr float cellSize = 1.0f;
 
     Renderer();

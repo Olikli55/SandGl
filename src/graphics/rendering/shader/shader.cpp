@@ -101,6 +101,5 @@ void Shader::setData(const std::string &varName, int data0, int data1)const
 }
 void Shader::setData(const std::string &varName, const float* mat4x4) const
 {
-    // mat4 in OpenGL is typically column-major; pass GL_FALSE unless you store row-major.
     glUniformMatrix4fv(glGetUniformLocation(ID, varName.c_str()), 1, GL_FALSE, mat4x4); //i can cache the get unifrom location
 }

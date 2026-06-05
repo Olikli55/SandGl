@@ -22,7 +22,7 @@ float lastTime = 0;
 float timer = 0;
 unsigned int temp = 0;
 unsigned int tempy = 4;
-constexpr double targetFPS = 60.0;
+constexpr double targetFPS = 30.0;
 constexpr auto targetFrame = std::chrono::duration<double>(1.0 / targetFPS);
 int main(){
     try{
@@ -47,7 +47,6 @@ int main(){
 
     using clock = std::chrono::steady_clock;
     auto nextPresent = clock::now();              // time of next render
-    auto lastPresent = clock::now();              // for render delta if you want it
 
 
     //LOOP=====================================LOOP//
@@ -62,9 +61,9 @@ int main(){
 
 
         if (window.pressedOnce(GLFW_KEY_SPACE)){
-            //gridManager.update();
+            gridManager.update();
         }
-        gridManager.update();
+        //gridManager.update();
 
         if (auto now = clock::now();
             now >= nextPresent)
@@ -88,13 +87,26 @@ int main(){
             //render the FBO on top of everything
             //===================================//
             renderer.renderUi();
+
+            //glfw - swap buffers and poll inpout + output events (keypress, mouse move ....);
+            //================================================================================//
+            glfwSwapBuffers(window.window);
+            glfwPollEvents();
+
+            nextPresent += std::chrono::duration_cast<clock::duration>(targetFrame);
+
+
+            //vsync catchup
+            //=============//
+            if (now > nextPresent + 5 * targetFrame)
+            {
+                nextPresent = now + std::chrono::duration_cast<clock::duration>(targetFrame);
+            }
+
         }
 
 
-        //glfw - swap buffers and poll inpout + output events (keypress, mouse move ....);
-        //================================================================================//
-        glfwSwapBuffers(window.window);
-        glfwPollEvents();
+
 
 
 

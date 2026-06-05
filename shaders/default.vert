@@ -29,7 +29,7 @@ void main()
            Color = vec3(0.8863, 0.7922, 0.4627); // sand
             break;
         case 2:
-            Color = vec3(0.15, 0.15, 0.15); //solid
+            Color = vec3(0.15, 0.15, 0.45); //water
             break;
         case 3:
             Color = vec3(0.0, 1.0, 1.0);
@@ -37,8 +37,8 @@ void main()
         case 4:
             Color = vec3(0.0, 0.0, 1.0);
             break;
-        case 5:
-            Color = vec3(0.0, 0.0, 0.0);
+        case 10:
+            Color = vec3(0.15, 0.15, 0.15); //water
             break;
         default:
             Color = vec3(0.5, 0.5, 0.5);
