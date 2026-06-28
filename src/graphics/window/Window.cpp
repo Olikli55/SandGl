@@ -122,10 +122,17 @@ void Window::mouse_button_callback(GLFWwindow* window, int button, int action, i
     {
         if (auto* windowClass  = static_cast<Window*>(glfwGetWindowUserPointer(window))) {
             if (button == GLFW_MOUSE_BUTTON_LEFT){
-                windowClass->grid->bufferGrid[windowClass->mousePosY][windowClass->mousePosX] = 2;
+                for (short x = -3; x < 3; x ++)
+                {
+                    for (short y = -3; y < 3; y ++)
+                    {
+                        windowClass->grid->grid[windowClass->mousePosY+y][windowClass->mousePosX + x] = CellType::Sand;
+
+                    }
+                }
 
             }else if (button == GLFW_MOUSE_BUTTON_RIGHT){
-                windowClass->grid->bufferGrid[windowClass->mousePosY][windowClass->mousePosX] = 1;
+                windowClass->grid->grid[windowClass->mousePosY][windowClass->mousePosX] = CellType::Air;
 
             }
         }

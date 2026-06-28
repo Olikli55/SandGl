@@ -22,7 +22,7 @@ float lastTime = 0;
 float timer = 0;
 unsigned int temp = 0;
 unsigned int tempy = 4;
-constexpr double targetFPS = 30.0;
+constexpr double targetFPS = 60.0;
 constexpr auto targetFrame = std::chrono::duration<double>(1.0 / targetFPS);
 int main(){
     try{
@@ -30,7 +30,6 @@ int main(){
         shader.init();
         screenShader.init();
         renderer.init(&shader, &screenShader);
-        //imageTexture = ImageLoader::loadImage("../assets/textures/container.jpg"); //current path is "SandGl/cmake-build-debug" therefore i need to use the ..
 
     }catch (const std::runtime_error& error) {
         std::cerr << error.what() << std::endl;
@@ -52,25 +51,20 @@ int main(){
     //LOOP=====================================LOOP//
     while(!glfwWindowShouldClose(window.window))
     {
-        //time logic
-        //==============//
-        //const auto currentFrame = static_cast<float>(glfwGetTime());
-        //deltaTime = currentFrame - lastTime;
-        //lastTime = currentFrame;
-        //timer += deltaTime;
-
 
         if (window.pressedOnce(GLFW_KEY_SPACE)){
             gridManager.update();
         }
-        //gridManager.update();
 
         if (auto now = clock::now();
             now >= nextPresent)
         {
+            gridManager.update();
+
+
             //update the buffers with new data
             //=================================//
-            renderer.updateCells(&gridManager.bufferGrid[0][0]);
+            renderer.updateCells(static_cast<const uint8_t*>(static_cast<const void*>(&gridManager.grid[0][0])));
 
 
             //draw elements into FBO
@@ -92,6 +86,8 @@ int main(){
             //================================================================================//
             glfwSwapBuffers(window.window);
             glfwPollEvents();
+
+
 
             nextPresent += std::chrono::duration_cast<clock::duration>(targetFrame);
 

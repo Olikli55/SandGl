@@ -4,160 +4,115 @@
 #include "vector2D.h"
 #include <cstring>
 
-Grid::Grid(): rng(std::random_device{}())
+Grid::Grid(): rng(std::random_device{}()), coinDist(0, 1)
 {
     constexpr int startY = GRID_H * 0.7;
 
-    for (int y = startY; y < GRID_H; ++y)
+    for (uint16_t y = startY; y < GRID_H; ++y)
     {
-        for (int x = 0; x < GRID_W; ++x)
+        for (uint16_t x = 0; x < GRID_W; ++x)
         {
-        bufferGrid[y][x] = 2;
+           grid[y][x] = CellType::Water;
         }}
-    return;
-
-    for (int y = 0; y < GRID_H; ++y)
-    {
-        for (int x = 0; x < GRID_W; ++x)
-        {
-            bufferGrid[y][x] = ((x + y) % 2 == 0) ? 10 : 0;
-
-        }
-    }
-   // constexpr int startY = GRID_H * 0.7;
-
-    for (int y = startY; y < GRID_H; ++y)
-    {
-        for (int x = 0; x < GRID_W; ++x)
-        {
-            if (x % 2 == 0){
-                bufferGrid[y][x] = 10;
-            }else
-            {
-                bufferGrid[y][x] = 0;
-            }
-
-        }
-    }
-    std::memcpy(grid, bufferGrid, sizeof(grid));
 }
 Grid::~Grid()=default;
 
 
 
 void Grid::update(){
-    //grid[0][GRID_H/3] = 1;
-    // grid[0][GRID_H/2-2] = 1;
-    //grid[0][GRID_H/2] = 1;
-    //grid[0][GRID_H/2-4] = 1;
-    //grid[0][GRID_H/2-10] = 1;
-    //grid[0][GRID_H/2-6] = 1;
     for (uint16_t y = 0; y < GRID_H; ++y){
         for (uint16_t x = 0; x < GRID_W; ++x){
-
-            switch (grid[y][x]){
-
-            case 1:
+            if (updated[y][x] == true) {continue;}
+            switch (grid[y][x]) {
+            case CellType::Sand:
                 updateSand({x,y});
                 break;
-            case 2:
+            case CellType::Water:
                 updateWater({x,y});
-                break;
             default:
                 break;
             }
         }
     }
 
-    std::memcpy(grid , bufferGrid, sizeof(grid));
 
+    memset(updated, false, sizeof(updated));
 }
 
-unsigned int Grid::getCellID(Vector2D pos) const
+CellType Grid::getCellID(Vector2D pos) const
 {
-    //@todo if he Vector2D is only a unsigned value there is no need to chek for zero
     // sidenote - negative numbers are converted into a biggest number possible for uint16_t
-    if (pos.x >= GRID_W || pos.x < 0 || pos.y >= GRID_H || pos.y < 0) {return 6;}
-    return bufferGrid[pos.y][pos.x];
-
+    if (pos.x >= GRID_W || pos.y >= GRID_H ) {return CellType::Solid;}
+    return grid[pos.y][pos.x];
 }
 
 bool Grid::isCellEmpty(Vector2D pos) const
 {
-    if (pos.x >= GRID_W || pos.x < 0 || pos.y >= GRID_H || pos.y < 0) {return false;}
-    return bufferGrid[pos.y][pos.x] == 0;
+    // sidenote - negative numbers are converted into a biggest number possible for uint16_t
+    if (pos.x >= GRID_W || pos.y >= GRID_H ) {return false;}
+    return grid[pos.y][pos.x] == CellType::Air;
 }
 
-void Grid::moveCell(Vector2D pos, Dir dir)
-{
+
+
+bool Grid::tryMoveCell(Vector2D pos, Dir dir){
+    const Vector2D newPos = {
+        static_cast<uint16_t>(pos.x + dir.x),
+        static_cast<uint16_t>(pos.y + dir.y)};
+    if (isCellEmpty(newPos))
+    {
+        grid[newPos.y][newPos.x] = grid[pos.y][pos.x];
+        grid[pos.y][pos.x] = CellType::Air;
+        updated[newPos.y][newPos.x] = true;
+        return true;
+    }
+    return false;
 
 }
 
-void Grid::pushWaterUp(Vector2D pos)
-{
+bool Grid::tryMoveCellType(Vector2D pos, Dir dir, CellType type){
+    const Vector2D newPos = {
+        static_cast<uint16_t>(pos.x + dir.x),
+        static_cast<uint16_t>(pos.y + dir.y)};
+    if (getCellID(newPos) == type)
+    {
+        grid[newPos.y][newPos.x] = grid[pos.y][pos.x];
+        grid[pos.y][pos.x] = type;
+        updated[newPos.y][newPos.x] = true;
+        return true;
+    }
+    return false;
 
 }
+
+
 
 void Grid::updateSand(Vector2D pos){
-    const uint16_t dirY = pos.y + 1;
-    if (const unsigned short id = getCellID({pos.x,dirY});
-        id == 0 || id == 2){
-        bufferGrid[dirY][pos.x] = grid[pos.y][pos.x];
+    const int8_t dirX = coinDist(rng) ? 1 : -1;
+    const int8_t negDirX = -dirX;
 
-    }else
-    {
-        std::uniform_int_distribution<int> coin(0, 1);
+    if (tryMoveCellType(pos, gravity, CellType::Water)) {updateWater(pos);}
+    else if (tryMoveCellType(pos, {dirX, gravity.y}, CellType::Water)){updateWater(pos);}
+    else if (tryMoveCellType(pos, {negDirX, gravity.y}, CellType::Water)){updateWater(pos);}
 
-        // i dont need to chek if the value is negative bc static  cast converts negative value to the max value and that is automaticly out of bounds
-        if (const int8_t dx = coin(rng) ? 1 : -1;
-            isCellEmpty({static_cast<uint16_t>(pos.x + dx),dirY})){
 
-            bufferGrid[dirY][pos.x + dx] = grid[pos.y][pos.x];
-            bufferGrid[pos.y][pos.x] = grid[dirY][pos.x+dx];
+    else if (tryMoveCell(pos, gravity)) {}
+    else if (tryMoveCell(pos, {dirX, gravity.y})){}
+    else if (tryMoveCell(pos, {negDirX, gravity.y})){}
 
-        } else if (isCellEmpty({static_cast<uint8_t>(pos.x - dx), dirY})){
 
-            bufferGrid[dirY][pos.x - dx] = grid[pos.y][pos.x];
-            bufferGrid[pos.y][pos.x] = grid[dirY][pos.x-dx];
-        }
-    }
 }
 
-void Grid::updateWater(Vector2D pos)
-{
-    const uint16_t dirY = pos.y + 1;
-    if (isCellEmpty({pos.x, dirY}))
-    {
-        bufferGrid[dirY][pos.x] = grid[pos.y][pos.x];
-        bufferGrid[pos.y][pos.x] = grid[dirY][pos.x];
-        return;
-    }
-    std::uniform_int_distribution<int> coin(0, 1);
 
-    const int16_t dx = coin(rng) ? 1 : -1;
-    if (isCellEmpty({static_cast<uint16_t>(pos.x + dx),dirY}))
-    {
-        bufferGrid[dirY][pos.x + dx] = grid[pos.y][pos.x];
-        bufferGrid[pos.y][pos.x] = grid[dirY][pos.x + dx];
-        return;
-    }
-    if (isCellEmpty({static_cast<uint16_t>(pos.x - dx), dirY}))
-    {
-        bufferGrid[dirY][pos.x - dx] = grid[pos.y][pos.x];
-        bufferGrid[pos.y][pos.x] = grid[dirY][pos.x - dx];
-        return;
-    }
+void Grid::updateWater(Vector2D pos){
+    const int8_t dirX = coinDist(rng) ? 1 : -1;
+    const int8_t negDirX = -dirX;
 
-    if (isCellEmpty({static_cast<uint16_t>(pos.x + dx), pos.y}))
-    {
-        bufferGrid[pos.y][pos.x + dx] = 2;
-        bufferGrid[pos.y][pos.x] = 0;
-        return;
-    }
-    if (isCellEmpty({static_cast<uint16_t>(pos.x - dx), pos.y}))
-    {
-        bufferGrid[pos.y][pos.x - dx] = 2;
-        bufferGrid[pos.y][pos.x] = 0;
-        return;
-    }
+    if (tryMoveCell(pos, gravity)) {}
+    else if (tryMoveCell(pos, {dirX, gravity.y})){}
+    else if (tryMoveCell(pos, {negDirX, gravity.y})){}
+    else if (tryMoveCell(pos, {dirX, 0})){}
+    else if (tryMoveCell(pos, {negDirX, 0})){}
 }
+
+

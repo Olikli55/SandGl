@@ -13,8 +13,8 @@
 class Renderer{
 
 public:
-    static constexpr int GRID_H =10;
-    static constexpr int GRID_W =10;
+    static constexpr int GRID_H =100;
+    static constexpr int GRID_W =100;
     static constexpr float cellSize = 1.0f;
 
     Renderer();
@@ -26,7 +26,7 @@ public:
     const Shader* shader{};
     const Shader* screenShader{};
     void DrawElements() const;
-    void updateCells(const unsigned int* type);
+    void updateCells(const  uint8_t* type);
     std::vector<float> vertices{};
     std::vector<GLuint> indices{};
     float screenVertices[24] = {

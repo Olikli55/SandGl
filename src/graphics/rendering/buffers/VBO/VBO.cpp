@@ -19,6 +19,9 @@ void VBO::setBufferData(const float* vertices, GLsizeiptr size){
 void VBO::setBufferData(const unsigned int* vertices, GLsizeiptr size){
 	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
 }
+void VBO::setBufferData(const uint8_t* vertices, GLsizeiptr size){
+	glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
+}
 
 void VBO::init(){
 	glGenBuffers(1, &ID);

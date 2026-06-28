@@ -56,29 +56,20 @@ void Renderer::init(const Shader *shader_, const Shader* screenShader_)
     screenVAO.LinkAttribFloat(screenVBO, 0, 2, GL_FLOAT, 4 * sizeof(float), nullptr);
     screenVAO.LinkAttribFloat(screenVBO, 1, 2, GL_FLOAT, 4 * sizeof(float), reinterpret_cast<void*>(2 * sizeof(float)));
 
-
-
-
     vao.Bind();
 
     vbo.Bind();
     vbo.setBufferData(vertices.data(), vertices.size() * sizeof(float));  // Upload the vertices to the gpu
 
-
-    const std::vector cellsTemp(GRID_H * GRID_W, 1u); // generate a list of ones
+    const std::vector<uint8_t> cellsTemp(GRID_H * GRID_W, 1u); // generate a list of ones
     offsetVBO.Bind();
-    offsetVBO.setBufferData(cellsTemp.data(), cellsTemp.size() * sizeof(unsigned int)); // upload to the of each cell to the gpu
-
+    offsetVBO.setBufferData(cellsTemp.data(), cellsTemp.size() * sizeof(uint8_t)); // upload to the of each cell to the gpu
 
     ebo.Bind();
     ebo.setBufferData(indices.data(), indices.size() * sizeof(GLuint));
 
-
-
-
     vao.LinkAttribFloat(vbo, 0, 2, GL_FLOAT, 2 * sizeof(float), nullptr); //vertices
-   // vao.LinkAttrib(vbo, 1, 3, GL_FLOAT,  sizeof(Vertex), reinterpret_cast<void*>(2 * sizeof(float))); //color
-    vao.LinkAttribInt(offsetVBO, 1, 1, GL_UNSIGNED_INT,sizeof(unsigned int), nullptr); // type of each cell
+    vao.LinkAttribInt(offsetVBO, 1, 1, GL_UNSIGNED_BYTE,sizeof(uint8_t), nullptr); // type of each cell
     glVertexAttribDivisor(1,1);
 
     fbo.Bind();
@@ -160,8 +151,8 @@ void Renderer::renderUi() const
     glDrawArrays(GL_TRIANGLES, 0,6);
 }
 
-void Renderer::updateCells(const unsigned int* type){
+void Renderer::updateCells(const uint8_t* type){
     offsetVBO.Bind();
-    offsetVBO.setBufferData(type, GRID_H * GRID_W * sizeof(unsigned int));
+    offsetVBO.setBufferData(type, GRID_H * GRID_W * sizeof(uint8_t));
 }
 

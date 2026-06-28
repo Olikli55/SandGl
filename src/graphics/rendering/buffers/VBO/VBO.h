@@ -16,6 +16,7 @@ public:
 	void setBufferData(const std::vector<unsigned int>* vertices, GLsizeiptr size);
 	void setBufferData(const float* vertices, GLsizeiptr size);
 	void setBufferData(const unsigned int* vertices, GLsizeiptr size);
+	void setBufferData(const  uint8_t* vertices, GLsizeiptr size);
 	void Bind() const;
 	void Unbind() const;
 	void Delete() const;
