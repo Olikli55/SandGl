@@ -33,19 +33,19 @@ void main()
             Color = vec3(0.0, 0.0, 0.0); //air
             break;
         case 1://solid
-           Color = vec3(0.0863, 0.079, 0.046); // sand
+           Color = vec3(0.0863, 0.079, 0.046);
             break;
         case 2://sand
-            Color = vec3(0.8863, 0.7922, 0.4627); // sand
+            Color = vec3(0.8863, 0.7922, 0.4627);
             break;
         case 3://water
             Color = vec3(0.15, 0.15, 0.45);
             break;
         case 4://gas
-            Color = vec3(0.0, 0.0, 1.0);
+            Color = vec3(0.1, 0.1, 0.1);
             break;
         case 10:
-            Color = vec3(0.15, 0.15, 0.15); //water
+            Color = vec3(0.15, 0.15, 0.15);
             break;
         default:
             Color = vec3(0.5, 0.5, 0.5);

@@ -4,16 +4,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 project(SandGl)
 
 
-# Option to enable AddressSanitizer (Default: OFF)
-option(ENABLE_ASAN "Enable AddressSanitizer" OFF)
 
-if(ENABLE_ASAN)
-message(STATUS "AddressSanitizer is ENABLED")
-# Apply flags to ALL targets defined after this point
-add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
-add_link_options(-fsanitize=address)
-endif()
 
+#add_compile_options(-fsanitize=address -fno-omit-frame-pointer -g)
+#add_link_options(-fsanitize=address)
 
 set(CMAKE_CXX_STANDARD 23)
 set(OpenGL_GL_PREFERENCE GLVND)

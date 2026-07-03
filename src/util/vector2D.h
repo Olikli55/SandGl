@@ -17,6 +17,13 @@ struct Vector2D
 };//4 bytes = 32 bits
 
 
+struct  Vector2Df
+{
+    float x; //4 bytes
+    float y; //4 bytes
+};
+//8 bytes = 64 bits
+
 
 // structs have a padding bc of speed. if the data is correctly aligned to 4 bytes its much faster to read than unaligned data
 //trade-offs:

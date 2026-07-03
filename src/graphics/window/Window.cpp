@@ -132,8 +132,14 @@ void Window::mouse_button_callback(GLFWwindow* window, int button, int action, i
                 }
 
             }else if (button == GLFW_MOUSE_BUTTON_RIGHT){
-                windowClass->grid->grid[windowClass->mousePosY][windowClass->mousePosX] = CellType::Air;
+                for (short x = -3; x < 3; x ++)
+                {
+                    for (short y = -3; y < 3; y ++)
+                    {
+                        windowClass->grid->grid[windowClass->mousePosY+y][windowClass->mousePosX + x] = CellType::Steam;
 
+                    }
+                }
             }
         }
     }
